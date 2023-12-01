@@ -10,6 +10,8 @@ from .managers import UserManager
 class User(PermissionsMixin, AbstractBaseUser):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=12, verbose_name=_("Phone Number"))
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
