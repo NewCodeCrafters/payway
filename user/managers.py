@@ -22,12 +22,12 @@ class UserManager(BaseUserManager):
         except ValidationError:
             raise _("Email Address not Valid")
 
-    def create_user(self, email, password, phone_number, **extra_fields):
+    def create_user(self, email, password, **extra_fields):
         """_summary_
 
         Args:
             email (email): Email Address
-            phone Number (str): Phone Number
+            username (str): Unique Username
             password (hash): password
 
         Raises:
@@ -51,7 +51,7 @@ class UserManager(BaseUserManager):
                 _("A valid Email Address must be provided for this account")
             )
 
-        user = self.model(email=email, phone_number=phone_number, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
         return user

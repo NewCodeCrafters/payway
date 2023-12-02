@@ -1,8 +1,8 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 from .models import User
@@ -12,7 +12,7 @@ from .models import User
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (_("AUTHENTICATION_FIELD"), {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "phone_number")}),
         (
             _("Permissions"),
             {
@@ -20,12 +20,10 @@ class UserAdmin(BaseUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
-                    "groups",
                     "user_permissions",
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
         (
@@ -44,4 +42,11 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     list_display_links = ["email"]
-    list_display =["email", "phone_number", "first_name", "last_name"]
+    list_display = ["email", "phone_number", "first_name", "last_name"]
+    list_filter = (
+        "is_superuser",
+        "is_active",
+    )
+    search_fields = ("email", "phone_number")
+    ordering = ("email",)
+    filter_horizontal = ("user_permissions",)

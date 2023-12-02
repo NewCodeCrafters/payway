@@ -24,7 +24,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "user"
+    "user",
+    "profiles",
+    "django_countries",
 ]
 
 AUTH_USER_MODEL = "user.User"
@@ -37,6 +39,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    # Other backends if needed
 ]
 
 ROOT_URLCONF = "core.urls"

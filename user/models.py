@@ -7,18 +7,13 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import UserManager
 
 
-class User(PermissionsMixin, AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=12, verbose_name=_("Phone Number"))
+    phone_number = models.CharField(
+        max_length=12, verbose_name=_("Phone Number"), unique=True
+    )
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
-    is_staff = models.BooleanField(
-        _("staff status"),
-        default=False,
-        help_text=_(
-            "Designates whether the user can has teacher's/staff's Priviledges."
-        ),
-    )
     is_owner = models.BooleanField(
         default=False,
         verbose_name=_("Owner Validity"),
@@ -34,6 +29,13 @@ class User(PermissionsMixin, AbstractBaseUser):
     )
     date_joined = models.DateTimeField(_("Date Joined"), auto_now_add=True)
     last_login = models.DateTimeField(_("Last Login Date"), auto_now=True)
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_(
+            "Designates whether the user can has teacher's/staff's Priviledges."
+        ),
+    )
 
     verified = models.BooleanField(
         _("email verification"),
@@ -44,3 +46,11 @@ class User(PermissionsMixin, AbstractBaseUser):
     USERNAME_FIELD = "email"
 
     objects = UserManager()
+
+    REQUIRED_FIELDS = [
+        "phone_number",
+    ]
+
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "Users"
