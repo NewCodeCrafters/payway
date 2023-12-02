@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "user",
     "profiles",
     "django_countries",
+    "account"
 ]
 
 AUTH_USER_MODEL = "user.User"

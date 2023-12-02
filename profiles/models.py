@@ -34,6 +34,46 @@ class Profiles(models.Model):
         max_length=100, choices=CurrrencyChoice.choices, blank=True
     )
 
+    def __str__(self) -> str:
+        return f"{self.user}'s profile"
+    # def save(self, *args, **kwargs):
+    #     if self.country == "Nigeria":
+    #         self.currency = "NGN"
+    #     elif self.country == "Canada":
+    #         self.currency = "CAD"
+    #     elif self.country == "United States":
+    #         self.currency = "USD",
+    #     elif self.country == "United Kingdom":
+    #         self.currency = "GBP",
+    #     elif self.country== "Australia":
+    #         self.currency = "AUD",
+    #     elif self.country == "Europe":
+    #         self.currency = "EUR",
+    #     elif self.country == "Ghana":
+    #         self.currency = "GHC",
+    #     else C        
+    #     return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        country_currency_mapping = {
+            'US': CurrrencyChoice.USD,
+            'CA': CurrrencyChoice.CAD,
+            'NG': CurrrencyChoice.NGN,
+            'GB': CurrrencyChoice.GBP,
+            'DE': CurrrencyChoice.EUR,
+            'AU': CurrrencyChoice.AUD,
+        }
+        if self.country:
+                country_code = self.country.code
+                if country_code in country_currency_mapping:
+                    self.currency = country_currency_mapping[country_code]
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
+
+
 
 # str
 
