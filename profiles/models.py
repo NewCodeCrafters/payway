@@ -35,50 +35,28 @@ class Profiles(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.user}'s profile"
-    # def save(self, *args, **kwargs):
-    #     if self.country == "Nigeria":
-    #         self.currency = "NGN"
-    #     elif self.country == "Canada":
-    #         self.currency = "CAD"
-    #     elif self.country == "United States":
-    #         self.currency = "USD",
-    #     elif self.country == "United Kingdom":
-    #         self.currency = "GBP",
-    #     elif self.country== "Australia":
-    #         self.currency = "AUD",
-    #     elif self.country == "Europe":
-    #         self.currency = "EUR",
-    #     elif self.country == "Ghana":
-    #         self.currency = "GHC",
-    #     else C        
-    #     return super().save(*args, **kwargs)
+        return f"{self.user.last_name}'s profile"
 
     def save(self, *args, **kwargs):
-        country_currency_mapping = {
-            'US': CurrrencyChoice.USD,
-            'CA': CurrrencyChoice.CAD,
-            'NG': CurrrencyChoice.NGN,
-            'GB': CurrrencyChoice.GBP,
-            'DE': CurrrencyChoice.EUR,
-            'AU': CurrrencyChoice.AUD,
-        }
-        if self.country:
-                country_code = self.country.code
-                if country_code in country_currency_mapping:
-                    self.currency = country_currency_mapping[country_code]
-        super().save(*args, **kwargs)
+        print(self.country)
+        if self.country == "NG":
+            self.currency = CurrrencyChoice.NGN.upper()
+        elif self.country == "CA":
+            self.currency = CurrrencyChoice.CAD.upper()
+        elif self.country == "US":
+            self.currency = CurrrencyChoice.USD.upper()
+        elif self.country == "UK":
+            self.currency = CurrrencyChoice.GBP.upper()
+        elif self.country == "AU":
+            self.currency = CurrrencyChoice.AUD.upper()
+        elif self.country == "IT" or self.country == "PL" or self.country == "DE":
+            self.currency = CurrrencyChoice.EUR.upper()
+        elif self.country == "GH":
+            self.currency = CurrrencyChoice.GHC.upper()
+        else:
+            self.currency = CurrrencyChoice.USD.upper()
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Profile"
         verbose_name_plural = "Profiles"
-
-
-
-# str
-
-# save
-
-# signals
-# Create a new app called accounts
-#
