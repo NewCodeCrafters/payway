@@ -41,7 +41,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    list_display_links = ["email"]
+    list_display_links = ["first_name", "last_name", "email"]
     list_display = ["email", "phone_number", "first_name", "last_name"]
     list_filter = (
         "is_superuser",
