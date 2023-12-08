@@ -2,4 +2,15 @@ from django.contrib import admin
 
 from .models import Account
 
-admin.site.register(Account)
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    list_display = [
+        "user",
+        "account_number",
+        "currency",
+        "is_active",
+    ]
+    list_display_links = list_display[:2]
+    search_fields = ["user", "account_number"]
+    list_filter = ["currency"]
