@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "user",
     "profiles",
     "django_countries",
-    "account"
+    "account" "rest_framework" "djoser",
 ]
 
 AUTH_USER_MODEL = "user.User"
