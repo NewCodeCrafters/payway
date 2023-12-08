@@ -24,10 +24,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # custom apps
     "user",
     "profiles",
     "django_countries",
-    "account"
+    "account",
+    # 3rd party apps
+    "djoser",
+    "rest_framework",
+    "rest_framework_simplejwt",
 ]
 
 AUTH_USER_MODEL = "user.User"
@@ -119,3 +124,34 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("JWT",),
+}
+
+DJOSER = {
+    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}",
+    "USERNAME_RESET_CONFIRM_URL": "/username/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "/activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True,
+    "SERIALIZERS": {
+        "user": "user.serializers.CustomUserSerializer",
+    },
+    "SEND_ACTIVATION_EMAIL": True,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "SET_PASSWORD_RETYPE": True,
+    "LOGOUT_ON_PASSWORD_CHANGE": True,
+    # 'EMAIL': {
+    #     'activation': 'djoser.email.ActivationEmail',
+    # }
+}
+
+# custom email configuration
