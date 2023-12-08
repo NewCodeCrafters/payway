@@ -48,5 +48,5 @@ class UserAdmin(BaseUserAdmin):
         "is_active",
     )
     search_fields = ("email", "phone_number")
-    ordering = ("email",)
+    # ordering = ("email",)
     filter_horizontal = ("user_permissions",)
