@@ -7,6 +7,7 @@ from django.core.validators import (
     MinLengthValidator,
 )
 from django_countries.fields import CountryField
+from .utils import generate_unique_account_number
 
 
 User = get_user_model()
@@ -29,7 +30,7 @@ class Profiles(models.Model):
     )
     address = models.CharField(max_length=100, blank=True)
     country = CountryField(blank=True)
-    dob = models.DateField(null=True)
+    dob = models.DateField(null=True, blank=True)
     currency = models.CharField(
         max_length=100, choices=CurrrencyChoice.choices, blank=True
     )
@@ -38,7 +39,8 @@ class Profiles(models.Model):
         return f"{self.user.last_name}'s profile"
 
     def save(self, *args, **kwargs):
-        print(self.country)
+        if not self.account_number:
+            self.account_number = generate_unique_account_number()
         if self.country == "NG":
             self.currency = CurrrencyChoice.NGN.upper()
         elif self.country == "CA":

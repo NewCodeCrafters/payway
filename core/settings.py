@@ -1,3 +1,4 @@
+from datetime import timedelta
 from decouple import config
 
 from pathlib import Path
@@ -134,7 +135,9 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "AUTH_HEADER_TYPES": ("JWT",),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=1),
 }
 
 
