@@ -1,5 +1,6 @@
 from django.db import models
 
+from django.core.validators import MinLengthValidator
 from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -8,9 +9,12 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, validators=[MinLengthValidator(6)])
     phone_number = models.CharField(
-        max_length=12, verbose_name=_("Phone Number"), unique=True
+        max_length=12,
+        verbose_name=_("Phone Number"),
+        unique=True,
+        validators=[MinLengthValidator(11)],
     )
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)

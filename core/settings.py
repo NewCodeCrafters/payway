@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "djoser",
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_yasg",
 ]
 
 AUTH_USER_MODEL = "user.User"
@@ -136,6 +137,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
 }
 
+
 DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "/username/reset/confirm/{uid}/{token}",
@@ -155,3 +157,11 @@ DJOSER = {
 }
 
 # custom email configuration
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    EMAIL_HOST_USER = "support@newcodecrafters.com"
+    EMAIL_HOST_PASSWORD = "mrbekay"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST_USER = "support@newcodecrafters.com"
+    EMAIL_HOST_PASSWORD = "mrbekay"
