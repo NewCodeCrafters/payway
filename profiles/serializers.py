@@ -6,6 +6,10 @@ from user.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+        email = serializers.CharField(
+            read_only=True,
+            max_length=100,
+        )
         fields = ("email", "first_name", "last_name", "phone_number")
 
 
@@ -22,3 +26,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profiles
         fields = ("user", "address", "country", "dob", "currency", "account_number")
+
+
+# class UpdateSerializer(serializers.ModelSerializer):
+#     user = UserSerializer()
