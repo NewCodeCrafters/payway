@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import response, status, permissions, views
+from drf_yasg.utils import swagger_auto_schema
 
 from .models import Profiles
 from .serializers import ProfileSerializer
@@ -16,6 +17,7 @@ class GetUpdateProfileView(views.APIView):
         serializer = ProfileSerializer(profile)
         return response.Response(serializer.data)
 
+    @swagger_auto_schema(request_body=ProfileSerializer)
     def put(self, request):
         user = request.user
         profile = Profiles.objects.get(user=user)

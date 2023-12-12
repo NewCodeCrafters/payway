@@ -1,15 +1,18 @@
 from rest_framework import serializers
 from .models import Profiles
 from user.models import User
+from djoser.serializers import UserCreateSerializer, UserSerializer
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(UserSerializer):
+    email = serializers.EmailField(
+        read_only=True,
+        max_length=100,
+    )
+
     class Meta:
         model = User
-        email = serializers.CharField(
-            read_only=True,
-            max_length=100,
-        )
+        ref_name = "UserSerializer"
         fields = ("email", "first_name", "last_name", "phone_number")
 
 
@@ -25,6 +28,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profiles
+        ref_name = "ProfileSerializer"
         fields = ("user", "address", "country", "dob", "currency", "account_number")
 
 
