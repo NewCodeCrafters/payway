@@ -31,6 +31,7 @@ class Profiles(models.Model):
     address = models.CharField(max_length=100, blank=True)
     country = CountryField(blank=True)
     dob = models.DateField(null=True, blank=True)
+    profile_pics = models.ImageField(upload_to="hahhaha", blank=True)
     currency = models.CharField(
         max_length=100, choices=CurrrencyChoice.choices, blank=True
     )

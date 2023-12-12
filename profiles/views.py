@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import response, status, permissions, views
 
+from .models import Profiles
 from .serializers import ProfileSerializer
 
 
@@ -10,7 +11,16 @@ class GetUpdateProfileView(views.APIView):
 
     # get, put, post, delete,
     def get(self, request):
-        return response.Response({"success": "You got in"})
+        user = request.user
+        profile = Profiles.objects.get(user=user)
+        serializer = ProfileSerializer(profile)
+        return response.Response(serializer.data)
 
     def put(self, request):
-        return response.Response({"success": "You got in"})
+        user = request.user
+        profile = Profiles.objects.get(user=user)
+        serializer = ProfileSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(serializer.data, status.HTTP_200_OK)
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

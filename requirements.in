@@ -20,6 +20,7 @@ inflection==0.5.1
 nodeenv==1.8.0
 oauthlib==3.2.2
 packaging==23.2
+Pillow==10.1.0
 platformdirs==4.0.0
 pre-commit==3.5.0
 pycparser==2.21
