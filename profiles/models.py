@@ -23,6 +23,13 @@ class CurrrencyChoice(models.TextChoices):
     GHC = "GHC"
 
 
+class CardType(models.TextChoices):
+    Passport = "Passport"
+    NIN = "NIN"
+    BVN = "BVN"
+    Drivers_license = "Drivers_license"
+
+
 class Profiles(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account_number = models.CharField(
@@ -34,6 +41,9 @@ class Profiles(models.Model):
     profile_pics = models.ImageField(upload_to="hahhaha", blank=True)
     currency = models.CharField(
         max_length=100, choices=CurrrencyChoice.choices, blank=True
+    )
+    id_verification = models.CharField(
+        max_length=100, choices=CardType.choices, blank=True
     )
 
     def __str__(self) -> str:
