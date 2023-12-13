@@ -45,6 +45,8 @@ class Profiles(models.Model):
     id_verification = models.CharField(
         max_length=100, choices=CardType.choices, blank=True
     )
+    document = models.FileField(upload_to="hahhaha", null=True, blank=True)
+    verified = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.user.last_name}'s profile"
