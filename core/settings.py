@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "drf_yasg",
+    "cloudinary_storage",
+    "cloudinary",
+    # corsheaders
 ]
 
 AUTH_USER_MODEL = "user.User"
@@ -122,8 +125,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 # Update media url
-MEDIA_URL = "/media/"
+MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 
 # Default primary key field type
@@ -172,3 +176,9 @@ else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST_USER = "support@newcodecrafters.com"
     EMAIL_HOST_PASSWORD = "mrbekay"
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": config("CLOUD_NAME"),
+    "API_KEY": config("API_KEY"),
+    "API_SECRET": config("API_SECRET"),
+}
