@@ -42,9 +42,12 @@ class Profiles(models.Model):
     currency = models.CharField(
         max_length=100, choices=CurrrencyChoice.choices, blank=True
     )
-    id_verification = models.CharField(
+    document_type = models.CharField(
         max_length=100, choices=CardType.choices, blank=True
     )
+    document = models.ImageField(upload_to="documents", blank=True)
+    doc_verified = models.BooleanField(default=False)
+    balance = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
 
     def __str__(self) -> str:
         return f"{self.user.last_name}'s profile"
