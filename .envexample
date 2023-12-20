@@ -1,5 +1,7 @@
 SECRET_KEY = ''
-
 API_KEY = ""
 API_SECRET = ""
 CLOUD_NAME = ""
+NAME = ""
+USER = ""
+PASSWORD = ""
