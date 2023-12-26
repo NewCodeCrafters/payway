@@ -9,7 +9,7 @@ class AccountAdmin(admin.ModelAdmin):
         "user",
         "account_number",
         "currency",
-        "approved",
+        "is_approved",
     ]
     list_display_links = list_display[:2]
     search_fields = ["user", "account_number"]

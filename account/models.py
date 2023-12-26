@@ -28,7 +28,7 @@ class Account(models.Model):
         max_length=10, choices=CurrrencyChoice.choices, blank=True
     )
     balance = models.DecimalField(decimal_places=2, max_digits=10)
-    approved = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.user}'s account"

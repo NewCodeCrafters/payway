@@ -11,5 +11,5 @@ def create_account_signals(sender, instance, created, **kwargs):
             user=instance.user,
             currency=instance.currency,
             balance=0,
-            approved=False,
+            is_approved=False,
         )
