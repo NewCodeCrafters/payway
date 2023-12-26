@@ -32,9 +32,9 @@ class CardType(models.TextChoices):
 
 class Profiles(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    account_number = models.CharField(
-        max_length=11, validators=[MinLengthValidator(10)], blank=True
-    )
+    # account_number = models.CharField(
+    #     max_length=11, validators=[MinLengthValidator(10)], blank=True
+    # )
     address = models.CharField(max_length=100, blank=True)
     country = CountryField(blank=True)
     dob = models.DateField(null=True, blank=True)
