@@ -86,7 +86,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",  # Set the database engine
         "NAME": config("NAME"),  # noqa
         "USER": config("USER"),  # noqa
-        "HOST": "localhost",
+        # "HOST": "localhost",
         "PASSWORD": config("PASSWORD"),  # noqa
         "PORT": 5432,
     }

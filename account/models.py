@@ -27,8 +27,7 @@ class Account(models.Model):
     currency = models.CharField(
         max_length=10, choices=CurrrencyChoice.choices, blank=True
     )
-    balance = models.FloatField()
-    is_active = models.BooleanField(default=False)
+    balance = models.DecimalField(decimal_places=2, max_digits=10)
     approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -38,3 +37,7 @@ class Account(models.Model):
         verbose_name = "Account"
         verbose_name_plural = "Accounts"
         unique_together = ("user", "currency")
+
+    def save(self, *args, **kwargs):
+
+        return super().save(*args, **kwargs)
