@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from account.utils import generate_account_number
+
 from django.core.validators import (
     MinValueValidator,
     MaxValueValidator,
@@ -39,5 +41,6 @@ class Account(models.Model):
         unique_together = ("user", "currency")
 
     def save(self, *args, **kwargs):
-
-        return super().save(*args, **kwargs)
+        if not self.account_number:
+            self.account_number = generate_account_number(self.currency)
+        super().save(*args, **kwargs)
