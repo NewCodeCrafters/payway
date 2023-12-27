@@ -10,7 +10,11 @@ class NewWalletViews(views.APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        user = request.user
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            # currency = serializer.data["currency"]
+            serializer.save(
+                user=user,
+            )
         return response.Response(serializer.data, status=status.HTTP_201_CREATED)

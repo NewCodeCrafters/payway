@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from account.utils import generate_account_number
+from account.utils import generate_account_number, generate_naira_account_number
 
 from django.core.validators import (
     MinValueValidator,
@@ -22,13 +22,11 @@ class CurrrencyChoice(models.TextChoices):
 
 
 class Account(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     account_number = models.CharField(
         max_length=11, validators=[MinLengthValidator(10)], blank=True
     )
-    currency = models.CharField(
-        max_length=10, choices=CurrrencyChoice.choices, blank=True
-    )
+    currency = models.CharField(max_length=10, choices=CurrrencyChoice.choices)
     balance = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
     is_approved = models.BooleanField(default=False)
 
@@ -41,6 +39,7 @@ class Account(models.Model):
         unique_together = ("user", "currency")
 
     def save(self, *args, **kwargs):
-        if not self.account_number:
-            self.account_number = generate_account_number(self.currency)
+        if not self.account_number and self.currency == "NGN":
+            self.account_number = generate_naira_account_number(self.currency)
+        # elif
         super().save(*args, **kwargs)
