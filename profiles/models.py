@@ -55,8 +55,8 @@ class Profiles(models.Model):
         return f"{self.user.last_name}'s profile"
 
     def save(self, *args, **kwargs):
-        if not self.account_number:
-            self.account_number = generate_unique_account_number()
+        # if not self.account_number:
+        #     self.account_number = generate_unique_account_number()
         if self.country == "NG":
             self.currency = CurrrencyChoice.NGN.upper()
         elif self.country == "CA":

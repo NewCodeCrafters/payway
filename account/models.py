@@ -29,7 +29,7 @@ class Account(models.Model):
     currency = models.CharField(
         max_length=10, choices=CurrrencyChoice.choices, blank=True
     )
-    balance = models.DecimalField(decimal_places=2, max_digits=10)
+    balance = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
     is_approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
