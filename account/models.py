@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from account.utils import generate_account_number, generate_naira_account_number
+from account.utils import (
+    generate_account_number,
+    generate_aud_account_number,
+    generate_canada_account_number,
+    generate_euros_account_number,
+    generate_ghc_account_number,
+    generate_naira_account_number,
+    generate_pounds_account_number,
+)
 
 from django.core.validators import (
     MinValueValidator,
@@ -41,5 +49,17 @@ class Account(models.Model):
     def save(self, *args, **kwargs):
         if not self.account_number and self.currency == "NGN":
             self.account_number = generate_naira_account_number(self.currency)
-        # elif
+        elif not self.account_number and self.currency == "CAD":
+            self.account_number = generate_canada_account_number(self.currency)
+        elif not self.account_number and self.currency == "GBP":
+            self.account_number = generate_pounds_account_number(self.currency)
+        elif not self.account_number and self.currency == "EUR":
+            self.account_number = generate_euros_account_number(self.currency)
+        elif not self.account_number and self.currency == "AUD":
+            self.account_number = generate_aud_account_number(self.currency)
+        elif not self.account_number and self.currency == "GHC":
+            self.account_number = generate_ghc_account_number(self.currency)
+        else:
+            self.account_number = generate_account_number(self.currency)
+
         super().save(*args, **kwargs)
