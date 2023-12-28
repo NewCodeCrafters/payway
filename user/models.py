@@ -53,6 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = [
         "phone_number",
+        "first_name",
+        "last_name",
     ]
 
     class Meta:

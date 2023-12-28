@@ -5,16 +5,15 @@ from django.core.validators import EmailValidator
 from .models import User
 
 
-class CustomUserSerializer(UserSerializer):
+class CustomUserSerializer(UserCreateSerializer):
     email = serializers.EmailField(
         validators=[EmailValidator()],
         required=True,
     )
 
-    class Meta:
+    class Meta(UserCreateSerializer.Meta):
         model = User
         fields = (
-            "id",
             "email",
             "phone_number",
             "first_name",
