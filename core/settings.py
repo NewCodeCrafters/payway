@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "profiles",
     "django_countries",
     "account",
+    "transactions",
     # 3rd party apps
     "djoser",
     "rest_framework",
@@ -37,7 +38,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "cloudinary_storage",
     "cloudinary",
-    # corsheaders
+    # 'corsheaders',
 ]
 
 AUTH_USER_MODEL = "user.User"
@@ -54,7 +55,6 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    # Other backends if needed
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -62,7 +62,9 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
