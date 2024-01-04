@@ -39,7 +39,7 @@ class Account(models.Model):
     is_approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return f"{self.user}'s account"
+        return f"{self.currency} account"
 
     class Meta:
         verbose_name = "Account"
