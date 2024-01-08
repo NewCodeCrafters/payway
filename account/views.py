@@ -2,8 +2,6 @@ from django.shortcuts import render
 from rest_framework import views, response, permissions, status
 from drf_yasg.utils import swagger_auto_schema
 
-from account.utils import get_exchange_rate
-
 from .models import Account
 from .serializers import AccountSerializer
 
@@ -52,14 +50,26 @@ class UpdateWalletView(views.APIView):
             return response.Response(
                 {"error": "Account not found"}, status=status.HTTP_404_NOT_FOUND
             )
-        previous_currency = wallet.currency
-        new_currency = request.data.get("currency", previous_currency)
+
+        # # # Check if the user is the owner of the restaurant
+        # if self.request.user != restaurant.vendor.user:
+        #     return response.Response(
+        #         {"error": "You are not authorized to update this restaurant profile"},
+        #         status=status.HTTP_403_FORBIDDEN,
+        #     )
+
+        # get previous currency
+        # new currency
+        #
         serializer = AccountSerializer(wallet, data=request.data)
         if serializer.is_valid():
-            rate = get_exchange_rate(new_currency, previous_currency)
+            # Update the name of the associated Restaurant model
+            # profile.restaurant.name = request.data.get('name', profile.restaurant.name)
+            # profile.restaurant.save()
+            # rate = get_exchange_rate(new_currency, prevoius_currency)
 
-            serializer.validated_data["balance"] = rate * wallet.balance
-
+            # serializer.balance = rate * serializer.balance
+            # Update the RestaurantProfile instance
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
