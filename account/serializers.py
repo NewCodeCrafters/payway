@@ -13,5 +13,5 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class WalletTransferSerializer(serializers.Serializer):
-    currency = serializers.CharField(max_length=4, choices=CurrrencyChoice.choices)
+    currency = serializers.ChoiceField(choices=CurrrencyChoice.choices)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
