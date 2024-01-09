@@ -14,6 +14,13 @@ def generate_trx_refrence():
             return generated_trx_refrence
 
 
+def generate_trf_id():
+    while True:
+        generate_trf_id = "".join([str(random.randint(0, 9)) for _ in range(15)])
+        if not models.Transactions.objects.filter(trf_id=generate_trf_id).exists():
+            return generate_trf_id
+
+
 def generate_transaction_reference():
     return str(uuid.uuid4().hex[:10])
 

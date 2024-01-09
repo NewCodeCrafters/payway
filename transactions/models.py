@@ -8,7 +8,7 @@ from django.core.validators import (
     MaxValueValidator,
     MinLengthValidator,
 )
-from transactions.utils import generate_transaction_reference
+from transactions.utils import generate_transaction_reference, generate_trf_id
 
 User = get_user_model()
 
@@ -39,18 +39,18 @@ class Deposit(models.Model):
 class TransactionChoices(models.TextChoices):
     DEPOSIT = "DEPOSIT"
     WITHDRAWAL = "WITHDRAWAL"
-    LOCAL_TRANSFER = "LOCAL TRANSFER"
-    INTER_TRANSFER = "INTER TRANSFER"
+    TRANSFER = "TRANSFER"
 
 
 class Transactions(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    trf_id = models.CharField(max_length=10, verbose_name="Transaction Reference ID")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="transaction_user"
+    )
     account_number = models.CharField(max_length=13)
     transaction_type = models.CharField(
         max_length=30, choices=TransactionChoices.choices
     )
-    from_acc = models.CharField(max_length=13, choices=CurrrencyChoice.choices)
-    currency = models.CharField(max_length=13, choices=CurrrencyChoice.choices)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=StatusChoice.choices)
@@ -60,4 +60,6 @@ class Transactions(models.Model):
         return f"{self.transaction_type} of {self.amount} to {self.currency}"
 
     def save(self, *args, **kwargs):
+        if not self.trf_id:
+            self.trf_id = generate_trf_id()
         super().save(*args, **kwargs)

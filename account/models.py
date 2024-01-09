@@ -30,7 +30,9 @@ class CurrrencyChoice(models.TextChoices):
 
 
 class Account(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="account_user"
+    )
     account_number = models.CharField(
         max_length=11, validators=[MinLengthValidator(10)], blank=True
     )

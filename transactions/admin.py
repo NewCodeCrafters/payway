@@ -9,7 +9,6 @@ class TransactionsAdmin(admin.ModelAdmin):
         "user",
         "account_number",
         "transaction_type",
-        "from_acc",
         "amount",
         "status",
     ]
