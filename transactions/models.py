@@ -13,14 +13,20 @@ from transactions.utils import generate_transaction_reference
 User = get_user_model()
 
 
+class StatusChoice(models.TextChoices):
+    PENDING = "PENDING"
+    CONFIRMED = "CONFIRMED"
+    FAILED = "FAILED"
+
+
 class Deposit(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     trx_reference = models.CharField(max_length=15, blank=True, unique=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
-
-    # status, updated
+    status = models.CharField(max_length=10, choices=StatusChoice.choices)
+    updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.id}"
@@ -47,8 +53,8 @@ class Transactions(models.Model):
     currency = models.CharField(max_length=13, choices=CurrrencyChoice.choices)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     created = models.DateTimeField(auto_now_add=True)
-    # status
-    # updated
+    status = models.CharField(max_length=10, choices=StatusChoice.choices)
+    updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.transaction_type} of {self.amount} to {self.currency}"
