@@ -31,7 +31,7 @@ class CardType(models.TextChoices):
 
 
 class Profiles(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     # account_number = models.CharField(
     #     max_length=11, validators=[MinLengthValidator(10)], blank=True
     # )

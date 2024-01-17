@@ -25,7 +25,9 @@ class Deposit(models.Model):
     trx_reference = models.CharField(max_length=15, blank=True, unique=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=StatusChoice.choices)
+    status = models.CharField(
+        max_length=14, choices=StatusChoice.choices, default=StatusChoice.CONFIRMED
+    )
     updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -43,7 +45,7 @@ class TransactionChoices(models.TextChoices):
 
 
 class Transactions(models.Model):
-    trf_id = models.CharField(max_length=10, verbose_name="Transaction Reference ID")
+    trf_id = models.CharField(max_length=16, verbose_name="Transaction Reference ID")
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="transaction_user"
     )
@@ -57,7 +59,7 @@ class Transactions(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.transaction_type} of {self.amount} to {self.currency}"
+        return f"{self.transaction_type} of {self.amount} to {self.account_number}"
 
     def save(self, *args, **kwargs):
         if not self.trf_id:

@@ -62,6 +62,5 @@ class Account(models.Model):
         elif not self.account_number and self.currency == "GHC":
             self.account_number = generate_ghc_account_number(self.currency)
         else:
-            self.account_number = generate_account_number(self.currency)
-
+            self.account_number = self.account_number
         super().save(*args, **kwargs)

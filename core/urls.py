@@ -24,6 +24,7 @@ urlpatterns = [
     path("auth/", include("djoser.urls.jwt")),
     path("profiles/", include("profiles.urls")),
     path("account/", include("account.urls")),
+    path("transactions/", include("transactions.urls")),
     path(
         "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
     ),
