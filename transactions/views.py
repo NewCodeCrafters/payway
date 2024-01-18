@@ -7,6 +7,8 @@ from profiles.models import Profiles
 from transactions.serializers import TransferSerializer
 from django.db import transaction
 
+from transactions.utils import get_exchange_rate
+
 
 # Create your views here.
 
@@ -31,7 +33,7 @@ class TransferFromMainAccountView(views.APIView):
     def post(self, request):
         profile = request.user.profile
         main_balance = profile.balance
-        # main_currency = profile.currency
+        main_currency = profile.currency
         serializer = TransferSerializer(data=request.data)
         if serializer.is_valid():
             account_number = serializer.validated_data.get("account_number")
@@ -45,9 +47,9 @@ class TransferFromMainAccountView(views.APIView):
                     )
                     if transaction_type == "DEPOSIT":
                         if main_balance >= amount:
-                            # rate = get_exchange_rate(account.currency, main_currency)
-                            # converted_value =
-                            account.balance += amount
+                            rate = get_exchange_rate(account.currency, main_currency)
+                            converted_value = amount / rate
+                            account.balance += converted_value
                             account.save()
                         else:
                             return response.Response(
@@ -56,7 +58,12 @@ class TransferFromMainAccountView(views.APIView):
                             )
                     elif transaction_type == "WITHDRAWAL":
                         if account.balance >= amount:
-                            account.balance -= amount
+                            rate = get_exchange_rate(
+                                main_currency,
+                                account.currency,
+                            )
+                            converted_value = amount / rate
+                            account.balance -= converted_value
                             account.save()
                         else:
                             return response.Response(
