@@ -39,6 +39,7 @@ def get_exchange_rate(target_currency, source_currency):
         "X-RapidAPI-Key": f"{settings.CURRENCY_API}",
         "X-RapidAPI-Host": "currency-converter18.p.rapidapi.com",
     }
+    # https://app.getpostman.com/join-team?invite_code=43adc5d1e1d67fdd94477b86cdf76d23&target_code=814740075ba942e6bae8df1a48bfcabf
 
     response = requests.get(url, headers=headers, params=querystring)
     values = response.json()
