@@ -48,6 +48,7 @@ class Profiles(models.Model):
     document = models.ImageField(upload_to="documents", blank=True)
     doc_verified = models.BooleanField(default=False)
     balance = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
+    net_balance = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
     document = models.FileField(upload_to="hahhaha", null=True, blank=True)
     verified = models.BooleanField(default=False)
 

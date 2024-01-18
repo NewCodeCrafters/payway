@@ -48,9 +48,11 @@ class TransferFromMainAccountView(views.APIView):
                     if transaction_type == "DEPOSIT":
                         if main_balance >= amount:
                             rate = get_exchange_rate(account.currency, main_currency)
-                            converted_value = amount / rate
+                            converted_value = amount * rate
                             account.balance += converted_value
                             account.save()
+                            profile.net_balance -= amount
+                            profile.save()
                         else:
                             return response.Response(
                                 {"error": "Insufficient main balance for deposit"},
@@ -62,9 +64,10 @@ class TransferFromMainAccountView(views.APIView):
                                 main_currency,
                                 account.currency,
                             )
-                            converted_value = amount / rate
+                            converted_value = amount * rate
                             account.balance -= converted_value
-                            account.save()
+                            profile.net_balance += converted_value
+                            profile.save()
                         else:
                             return response.Response(
                                 {"error": "Insufficient balance for withdrawal"},
