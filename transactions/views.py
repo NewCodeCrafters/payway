@@ -116,18 +116,46 @@ class OtherWalletTransferViews(views.APIView):
                 recipient_account = Account.objects.get(
                     account_number=serializer.validated["account_number"]
                 )
+                recipent_profile = recipient_account.account_user
                 amount = serializer.validated_data.get("amount")
                 with transaction.atomic():
                     if sender_account.balance >= amount:
+
                         sender_rate = get_exchange_rate(
                             currency, recipient_account.currency
                         )
                         receiver_converted_value = sender_rate * amount
                         print(receiver_converted_value)
-                        main_balance_rate = get_exchange_rate(
+                        sender_account.balance -= amount
+                        sender_account.save()
+                        recipient_account.balance += receiver_converted_value
+                        recipient_account.save()
+
+                        recipent_main_balance_rate = get_exchange_rate(
+                            currency, recipent_profile.currency
+                        )
+                        print(recipent_main_balance_rate)
+                        recipent_main_balance_converted_value = (
+                            recipent_main_balance_rate * amount
+                        )
+                        recipent_profile.balance += (
+                            recipent_main_balance_converted_value
+                        )
+                        recipent_profile.net_balance += (
+                            recipent_main_balance_converted_value
+                        )
+                        recipent_profile.save()
+
+                        sender_main_balance_rate = get_exchange_rate(
                             profile.currency, currency
                         )
-                        print(main_balance_rate)
+                        print(sender_main_balance_rate)
+                        sender_main_balance_converted_value = (
+                            sender_main_balance_rate * amount
+                        )
+                        profile.balance -= sender_main_balance_converted_value
+                        profile.net_balance -= sender_main_balance_converted_value
+                        profile.save()
                         return response.Response(
                             {"success": "Transfer Successful"},
                             status=status.HTTP_201_CREATED,
