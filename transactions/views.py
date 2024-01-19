@@ -4,7 +4,7 @@ from drf_yasg.utils import swagger_auto_schema
 from account.models import Account
 from account.serializers import AccountSerializer
 from profiles.models import Profiles
-from transactions.serializers import TransferSerializer
+from transactions.serializers import TransferSerializer, InterTransferSerializer
 from django.db import transaction
 
 from transactions.utils import get_exchange_rate
@@ -38,7 +38,6 @@ class TransferFromMainAccountView(views.APIView):
         if serializer.is_valid():
             account_number = serializer.validated_data.get("account_number")
             transaction_type = serializer.validated_data.get("transaction_type")
-            print(transaction_type)
             amount = serializer.validated_data.get("amount")
             try:
                 with transaction.atomic():
@@ -53,6 +52,7 @@ class TransferFromMainAccountView(views.APIView):
                             account.save()
                             profile.net_balance -= amount
                             profile.save()
+
                         else:
                             return response.Response(
                                 {"error": "Insufficient main balance for deposit"},
@@ -93,3 +93,51 @@ class TransferFromMainAccountView(views.APIView):
         return response.Response(
             {"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class OtherWalletTransferViews(views.APIView):
+    serializer_class = InterTransferSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(request_body=serializer_class)
+    def post(self, request, currency):
+        user = request.user
+        profile = user.profile
+        try:
+            sender_account = Account.objects.get(user=user, currency=currency.upper())
+        except Account.DoesNotExist:
+            return response.Response(
+                {"error": "Account with this currency not available for user"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        serializer = InterTransferSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                recipient_account = Account.objects.get(
+                    account_number=serializer.validated["account_number"]
+                )
+                amount = serializer.validated_data.get("amount")
+                with transaction.atomic():
+                    if sender_account.balance >= amount:
+                        sender_rate = get_exchange_rate(
+                            currency, recipient_account.currency
+                        )
+                        receiver_converted_value = sender_rate * amount
+                        print(receiver_converted_value)
+                        main_balance_rate = get_exchange_rate(
+                            profile.currency, currency
+                        )
+                        print(main_balance_rate)
+                        return response.Response(
+                            {"success": "Transfer Successful"},
+                            status=status.HTTP_201_CREATED,
+                        )
+                    else:
+                        return response.Response(
+                            {"error": "Insufficient Funds"},
+                            status=status.HTTP_404_NOT_FOUND,
+                        )
+            except Account.DoesNotExist:
+                return response.Response(
+                    {"error": "Account not found"}, status=status.HTTP_404_NOT_FOUND
+                )
