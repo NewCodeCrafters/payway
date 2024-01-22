@@ -52,7 +52,6 @@ class TransferFromMainAccountView(views.APIView):
                             account.save()
                             profile.net_balance -= amount
                             profile.save()
-
                         else:
                             return response.Response(
                                 {"error": "Insufficient main balance for deposit"},
@@ -114,48 +113,23 @@ class OtherWalletTransferViews(views.APIView):
         if serializer.is_valid():
             try:
                 recipient_account = Account.objects.get(
-                    account_number=serializer.validated["account_number"]
+                    account_number=serializer.validated_data.get("account_number")
                 )
-                recipent_profile = recipient_account.account_user
                 amount = serializer.validated_data.get("amount")
                 with transaction.atomic():
                     if sender_account.balance >= amount:
-
+                        print(currency.upper(), recipient_account.currency)
                         sender_rate = get_exchange_rate(
-                            currency, recipient_account.currency
+                            currency.upper(), recipient_account.currency
                         )
+                        print(sender_rate)
+                        print(amount)
                         receiver_converted_value = sender_rate * amount
                         print(receiver_converted_value)
-                        sender_account.balance -= amount
-                        sender_account.save()
-                        recipient_account.balance += receiver_converted_value
-                        recipient_account.save()
-
-                        recipent_main_balance_rate = get_exchange_rate(
-                            currency, recipent_profile.currency
+                        main_balance_rate = get_exchange_rate(
+                            profile.currency, currency.upper()
                         )
-                        print(recipent_main_balance_rate)
-                        recipent_main_balance_converted_value = (
-                            recipent_main_balance_rate * amount
-                        )
-                        recipent_profile.balance += (
-                            recipent_main_balance_converted_value
-                        )
-                        recipent_profile.net_balance += (
-                            recipent_main_balance_converted_value
-                        )
-                        recipent_profile.save()
-
-                        sender_main_balance_rate = get_exchange_rate(
-                            profile.currency, currency
-                        )
-                        print(sender_main_balance_rate)
-                        sender_main_balance_converted_value = (
-                            sender_main_balance_rate * amount
-                        )
-                        profile.balance -= sender_main_balance_converted_value
-                        profile.net_balance -= sender_main_balance_converted_value
-                        profile.save()
+                        print(main_balance_rate)
                         return response.Response(
                             {"success": "Transfer Successful"},
                             status=status.HTTP_201_CREATED,
