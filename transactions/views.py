@@ -115,21 +115,31 @@ class OtherWalletTransferViews(views.APIView):
                 recipient_account = Account.objects.get(
                     account_number=serializer.validated_data.get("account_number")
                 )
+                recipient_profile = recipient_account.profile
                 amount = serializer.validated_data.get("amount")
                 with transaction.atomic():
                     if sender_account.balance >= amount:
-                        print(currency.upper(), recipient_account.currency)
                         sender_rate = get_exchange_rate(
                             currency.upper(), recipient_account.currency
                         )
-                        print(sender_rate)
-                        print(amount)
                         receiver_converted_value = sender_rate * amount
                         print(receiver_converted_value)
-                        main_balance_rate = get_exchange_rate(
+                        sender_account.balance -= amount
+                        sender_account.save()
+                        recipient_account.balance += receiver_converted_value
+                        recipient_account.save()
+                        recipient_main_balance_rate = get_exchange_rate(
+                            currency.upper(), recipient_profile.currency
+                        )
+                        recipient_converted_value = recipient_main_balance_rate * amount
+                        recipient_profile.balance += recipient_converted_value
+                        recipient_profile.save()
+                        sender_main_balance_rate = get_exchange_rate(
                             profile.currency, currency.upper()
                         )
-                        print(main_balance_rate)
+                        sender_converted_value = sender_main_balance_rate * amount
+                        profile.balance -= sender_converted_value
+                        profile.save()
                         return response.Response(
                             {"success": "Transfer Successful"},
                             status=status.HTTP_201_CREATED,
