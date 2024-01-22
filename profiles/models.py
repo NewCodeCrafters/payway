@@ -7,7 +7,6 @@ from django.core.validators import (
     MinLengthValidator,
 )
 from django_countries.fields import CountryField
-from .utils import generate_unique_account_number
 
 
 User = get_user_model()

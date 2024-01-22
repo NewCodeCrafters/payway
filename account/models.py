@@ -49,7 +49,9 @@ class Account(models.Model):
         unique_together = ("user", "currency")
 
     def save(self, *args, **kwargs):
-        if not self.account_number and self.currency == "NGN":
+        if not self.account_number and self.currency == "USD":
+            self.account_number = generate_naira_account_number(self.currency)
+        elif not self.account_number and self.currency == "NGN":
             self.account_number = generate_naira_account_number(self.currency)
         elif not self.account_number and self.currency == "CAD":
             self.account_number = generate_canada_account_number(self.currency)

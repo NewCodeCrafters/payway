@@ -1,6 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from account.models import Account
+from profiles.utils import generate_unique_account_number
 from .models import Profiles
 
 
