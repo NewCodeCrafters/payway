@@ -9,8 +9,9 @@ class AccountAdmin(admin.ModelAdmin):
         "user",
         "account_number",
         "currency",
+        "balance",
         "is_approved",
     ]
-    list_display_links = list_display[:2]
+    list_display_links = list_display[:-1]
     search_fields = ["user", "account_number"]
     list_filter = ["currency"]

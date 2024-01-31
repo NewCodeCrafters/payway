@@ -115,15 +115,15 @@ class OtherWalletTransferViews(views.APIView):
                 recipient_account = Account.objects.get(
                     account_number=serializer.validated_data.get("account_number")
                 )
-                recipient_profile = recipient_account.profile
+                recipient_profile = recipient_account.user.profile
                 amount = serializer.validated_data.get("amount")
                 with transaction.atomic():
                     if sender_account.balance >= amount:
                         sender_rate = get_exchange_rate(
-                            currency.upper(), recipient_account.currency
+                            recipient_account.currency, currency.upper()
                         )
                         receiver_converted_value = sender_rate * amount
-                        print(receiver_converted_value)
+
                         sender_account.balance -= amount
                         sender_account.save()
                         recipient_account.balance += receiver_converted_value
