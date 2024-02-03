@@ -3,17 +3,17 @@ from rest_framework import views, response, permissions, status
 from drf_yasg.utils import swagger_auto_schema
 
 from .models import Account
-from .serializers import AccountSerializer
+from .serializers import AccountSerializer, AdminAccountSerializer
 
 
 class NewWalletViews(views.APIView):
     serializer_class = AccountSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     @swagger_auto_schema(request_body=serializer_class)
     def post(self, request):
         user = request.user
-        serializer = AccountSerializer(data=request.data)
+        serializer = AdminAccountSerializer(data=request.data)
         if serializer.is_valid():
             # currency = serializer.data["currency"]
             serializer.save(
@@ -24,7 +24,7 @@ class NewWalletViews(views.APIView):
 
 class UpdateWalletView(views.APIView):
     serializer_class = AccountSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdmin]
 
     def get(self, request, account_number):
         try:
