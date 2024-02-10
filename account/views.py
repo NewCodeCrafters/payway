@@ -24,7 +24,7 @@ class NewWalletViews(views.APIView):
 
 class UpdateWalletView(views.APIView):
     serializer_class = AccountSerializer
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdmin]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def get(self, request, account_number):
         try:

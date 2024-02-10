@@ -6,17 +6,3 @@ NAME = ""
 USER = ""
 PASSWORD = ""
 
-SECRET_KEY = 'django-insecure-l&%w-*@#o9n^3!(2l^8v6ztxwud2d!v#5n5fj9of0y*l9e28w+'
-
-API_KEY = "877673787351376"
-API_SECRET = "iv_5Lq0A1BhWFgF23-ib77Ae6E8"
-CLOUD_NAME = "dknbqe8ur"
-
-NAME = "pay"
-PASSWORD = "debug"
-USER = 'postgres'
-
-EMAIL_HOST_USER = "belloabdulhakeemolamide@gmail.com"
-EMAIL_HOST_PASSWORD = "sjafqvfhfnxsdcxp"
-
-CURRENCY_API = "0d68d5c233msh6df685900d19a54p12a234jsn7cdaf6f6616f"
